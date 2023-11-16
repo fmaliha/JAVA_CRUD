@@ -47,11 +47,22 @@ public class UserController {
             model.addAttribute("pageTitle", "Edit User (ID:" +id+ ")");
             return "user_form";
         } catch (UserNotFoundException e) {
-                ra.addFlashAttribute("message","The user has been saved successfully!");
-                return "redirect: /users";
-
+                ra.addFlashAttribute("message",e.getMessage());
+                return "redirect:/users";
         }
 
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes ra){
+        try{
+            service.delete(id);
+            ra.addFlashAttribute("message","User ID " + id+ " has been deleted successfully!");
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message",e.getMessage());
+
+        }
+        return "redirect:/users";
     }
 
 }
